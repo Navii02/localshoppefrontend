@@ -1,0 +1,77 @@
+/* Navbar styles */
+.business-navbar {
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    border-bottom: 2px solid #f39c12;
+  }
+  
+  .navbar-brand-custom {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f39c12;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+  }
+  
+  .brand-icon {
+    font-size: 1.8rem;
+    margin-right: 10px;
+  }
+  
+  .custom-nav-link {
+    color: #ecf0f1;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .custom-nav-link:hover {
+    color: #f39c12;
+    transform: scale(1.1);
+  }
+  
+  .custom-dropdown-title {
+    color: #ecf0f1;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .navbar-toggler {
+    border-color: #f39c12;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: linear-gradient(to bottom, #f39c12, #ecf0f1);
+  }
+  
+  .nav-dropdown-item {
+    color: #34495e !important;
+    font-size: 0.95rem;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .nav-dropdown-item:hover {
+    background-color: #f39c12;
+    color: #2c3e50;
+  }
+  
+  .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* AddProject button */
+  button.add-project-btn {
+    background: transparent;
+    border: 2px solid #f39c12;
+    color: #f39c12;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  button.add-project-btn:hover {
+    background: #f39c12;
+    color: #ecf0f1;
+  }
+  
