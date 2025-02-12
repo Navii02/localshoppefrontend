@@ -1,0 +1,86 @@
+/* Basic Styling */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+/* Profile Card */
+.profile-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Profile Image */
+.profile-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+  margin-bottom: 10px;
+}
+
+/* Status Styling */
+.status {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background: #007bff;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* Section Styling */
+.profile-section {
+  text-align: left;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+}
+
+.profile-section h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.profile-section p {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0;
+}
+
+/* Document Images */
+.document-img {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .profile-card {
+    width: 95%;
+  }
+
+  .profile-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .document-img {
+    max-width: 100%;
+  }
+}

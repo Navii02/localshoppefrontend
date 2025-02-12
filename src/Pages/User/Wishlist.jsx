@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import UserHeader from "../../components/UserHeader";
-import WishlistCard from "../../components/WishlistCard";
+
 import { getwishlistapi } from "../../service/allApi";
+import "./Wishlist.css"; // Import CSS for better styling
+import UserCards from "../../components/UserCards";
 
 function Wishlist() {
   const [products, setProducts] = useState([]); // Use array as the initial state
-  console.log(products);
-  
+
+  // Fetch wishlist items
   const getWishlist = async () => {
     if (sessionStorage.getItem("token")) {
       const token = sessionStorage.getItem("token");
@@ -17,7 +19,7 @@ function Wishlist() {
       try {
         const result = await getwishlistapi(reqHeader);
         if (result.status === 200) {
-          setProducts(result.data); // Update state with fetched wishlist products
+          setProducts(result.data);
         } else {
           console.error("Failed to fetch wishlist data.");
         }
@@ -28,24 +30,23 @@ function Wishlist() {
   };
 
   useEffect(() => {
-    getWishlist(); // Fetch wishlist on component mount
+    getWishlist();
   }, []);
 
   return (
     <>
       <UserHeader />
-      <div className="container mt-5">
-        <div className="row g-4">
-          {products.length > 0 ? (
-            products?.map((product) => (
-              <div className="col-sm-6 col-md-4 col-lg-3" key={product._id}>
-                <WishlistCard product={product} /> {/* Pass individual product */}
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-muted">Your wishlist is empty.</p>
-          )}
-        </div>
+      <div className="wishlist-container">
+        <h2 className="wishlist-title">Your Wishlist ❤️</h2>
+        {products.length > 0 ? (
+          <div className="wishlist-grid">
+            {products.map((product) => (
+              <UserCards key={product._id} products={product} />
+            ))}
+          </div>
+        ) : (
+          <p className="empty-wishlist-text">Your wishlist is empty 😢</p>
+        )}
       </div>
     </>
   );

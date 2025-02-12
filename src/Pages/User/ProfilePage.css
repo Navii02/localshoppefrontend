@@ -1,71 +1,61 @@
-/* Container for the Profile Page */
-.profile-page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding-top: 30px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .profile-container {
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .profile-heading {
-    text-align: center;
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 20px;
-    font-weight: 600;
-  }
-  
-  .profile-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
-  }
-  
-  .profile-info p {
-    font-size: 1.1rem;
-    margin: 10px 0;
-    color: #555;
-  }
-  
-  .profile-info p strong {
-    color: #333;
-  }
-  
-  .text-center {
-    text-align: center;
-    color: #f44336; /* Red for alert */
-    font-size: 1.2rem;
-    font-weight: 500;
-    padding: 20px;
-  }
-  
-  /* Styling the user info items */
-  .profile-info p {
-    font-size: 1.2rem;
-    color: #555;
-  }
-  
-  .profile-info p strong {
-    color: #444;
-  }
-  
-  /* Responsive styling */
-  @media (max-width: 768px) {
-    .profile-page {
-      padding: 15px;
-    }
-  
-    .profile-container {
-      padding: 15px;
-    }
-  }
-  
+/* Profile Page Styles */
+.profile-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f4f4f4;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 400px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile-card:hover {
+  transform: scale(1.02);
+}
+
+/* Avatar */
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.user-icon {
+  font-size: 80px;
+  color: #555;
+}
+
+/* Profile Title */
+.profile-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Profile Info */
+.profile-info p {
+  font-size: 16px;
+  color: #555;
+  margin: 8px 0;
+}
+
+.profile-info strong {
+  color: #222;
+}
+
+/* No User Found */
+.no-user-text {
+  font-size: 18px;
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+}

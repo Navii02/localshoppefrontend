@@ -17,6 +17,7 @@ const {setEditResponse} =useContext(editResponseContext)
     price: '',
     expiryDate: '',
     description: '',
+    expectedDeliveryTime:'',
   });
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const {setEditResponse} =useContext(editResponseContext)
         price: productData.price || '',
         expiryDate: productData.expiryDate || '',
         description: productData.description || '',
+        expectedDeliveryTime: productData.expectedDeliveryTime ||'',
       });
 
       if (productData.images) {
@@ -50,6 +52,7 @@ console.log(images);
       price: '',
       expiryDate: '',
       description: '',
+      expectedDeliveryTime:''
     });
     setImages([]);
     setShow(false);
@@ -92,6 +95,7 @@ console.log(images);
     data.append('price', ProductData.price);
     data.append('expiryDate', ProductData.expiryDate);
     data.append('description', ProductData.description);
+    data.append('expectedDeliveryTime', ProductData.expectedDeliveryTime);
 
     images.forEach(({ file, preview }) => {
       if (file) {
@@ -214,6 +218,14 @@ console.log(images);
                     value={ProductData.expiryDate}
                     onChange={handleInputChange}
                   />
+                       <input
+                    type="text"
+                    placeholder="expected Delivery Time"
+                    name="expectedDeliveryTime"
+                    className="form-control rounded mt-3"
+                    value={ProductData.expectedDeliveryTime}
+                    onChange={handleInputChange}
+                  />
                   <textarea
                     rows={6}
                     placeholder="Description"
@@ -227,14 +239,15 @@ console.log(images);
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            Update
-          </Button>
-        </Modal.Footer>
+        <Modal.Footer className="p-4">
+  <Button variant="secondary" className="me-3" onClick={handleClose}>
+    Cancel
+  </Button>
+  <Button variant="primary" onClick={handleSubmit}>
+    Update
+  </Button>
+</Modal.Footer>
+
       </Modal>
     </div>
   );

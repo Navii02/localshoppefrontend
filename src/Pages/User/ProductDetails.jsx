@@ -1,190 +1,171 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // For routing and product ID handling
-import { Button, Card, Row, Col,Form } from "react-bootstrap"; // For Bootstrap UI components
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button, Card, Row, Col, Form, Container, Carousel } from "react-bootstrap";
 import UserHeader from "../../components/UserHeader";
-import { ProductDetail,AddtoCart } from "../../service/allApi";
+import { ProductDetail, AddtoCart, addreview } from "../../service/allApi";
 import { url } from "../../service/ServiceUrl";
-
-//import "./ProductDetailsPage.css"; // Custom styling for the page
+import "./ProductDetails.css";  
 
 function ProductDetails() {
-    const { id } = useParams(); // Get product ID from URL (if using React Router)
-    console.log(id)
-    // State for product details and reviews
-    const [product, setProduct] = useState({});
-    console.log(product);
-    
-    const [reviews, setReviews] = useState(product.reviews || []); // Existing reviews
+  const { id } = useParams();
+  const [product, setProduct] = useState({});
+  const user = JSON.parse(sessionStorage.getItem('userdetails'));
+  const [quantity, setQuantity] = useState(1); 
+  const [reviews, setReviews] = useState([]);
+  const [newReview, setNewReview] = useState({
+    user: user.username,
+    rating: "",
+    comment: "",
+  });
+  const [expectedDeliveryTime, setExpectedDeliveryTime] = useState(""); 
 
-    const [newReview, setNewReview] = useState({
-      user: "",
-      rating: "",
-      comment: "",
-    }); // State for new review
+  const navigate = useNavigate();
+  const userId = user._id;
   
-  const fetchProduct = async()=>{
-    if(id){
-      const result=await ProductDetail(id)
-      console.log(result.data);
-      if(result.status==200){
-        setProduct(result.data)
+  const fetchProduct = async () => {
+    if (id) {
+      const result = await ProductDetail(id);
+      if (result.status === 200) {
+        setProduct(result.data);
+        setReviews(result.data.reviews || []);
 
-      }else{
-      alert("Something went wrong Please try again later")
+        // Calculate Expected Delivery Time
+        const currentTime = new Date();
+        const deliveryTime = new Date(currentTime);
+        const deliveryMinutes = parseInt(result.data.expectedDeliveryTime, 10);
+
+        deliveryTime.setMinutes(
+          currentTime.getMinutes() + deliveryMinutes
+        );
+        const hours = deliveryTime.getHours();
+        const minutes = deliveryTime.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+        const formattedTime = `${hours % 12 || 12}:${minutes
+          .toString()
+          .padStart(2, "0")} ${ampm}`;
+        setExpectedDeliveryTime(formattedTime);
+      } else {
+        alert("Something went wrong. Please try again later.");
       }
-      
     }
-  }
-    useEffect(() => {
-      // Simulate fetching product details from an API
-     
-  
-      fetchProduct();
-    }, [id]);
-  
-    const handleAddReview = () => {
-      if (!newReview.user || !newReview.rating || !newReview.comment) {
-        alert("Please fill out all fields before submitting your review.");
-        return;
-      }
-  
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  }, [id]);
+
+  const handleAddReview = async () => {
+    if (!newReview.rating && !newReview.comment) {
+      alert("Please fill out all fields before submitting your review.");
+      return;
+    }
+    const result = await addreview(id, newReview);
+    if (result.status === 200) {
       setReviews([...reviews, newReview]);
-      setNewReview({ user: "", rating: "", comment: "" }); // Reset the form
+      setNewReview({ user: user.username, rating: "", comment: "" });
+      alert("Rating added successfully");
+    }
+  };
 
-    };
-    // Handle Add to Cart action
-    const handleAddToCart = async(reqBody) => {
-      console.log(reqBody);
-      
-   
-      if(sessionStorage.getItem("token")){
-        const token = sessionStorage.getItem("token");
-        
-        const reqHeader = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // No need for Content-Type with FormData
-        };
-        console.log(reqHeader);
-        
-        const result= await AddtoCart(reqBody,reqHeader)
-        console.log(result);
-        
-        //alert("Added to Cart!");
-    
+  const handleBuyNow = (productId) => {
+    if (product.productQuantity < quantity) {
+      alert("Sorry, the product is not available");
+    } else {
+      handleAddToCart()
+      navigate(`/payment/${productId}`);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (sessionStorage.getItem("token")) {
+      const token = sessionStorage.getItem("token");
+      const reqHeader = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+      const cartItem = { ...product, quantity }; 
+      const result = await AddtoCart(cartItem, reqHeader);
+      if (result.status === 200) {
+        alert("Item added to cart successfully");
+      } else {
+        alert("Something went wrong");
       }
-     
-      
-      // You can add more logic here, like adding the product to the cart array in the global state
-    };
-  
-    // Handle Buy Now action
-    const handleBuyNow = () => {
-      alert("Proceeding to Checkout!");
-      // Implement checkout flow here
-    };
-  
-    return (
-        <>
-        <UserHeader />
-        <div className="product-details-page" style={{ marginTop: "100px" }}>
-      <Row className="justify-content-center">
-        {/* Product Image and Details */}
-        <Col md={6} className="product-details-card">
-          <Card className="product-card">
-          <Card.Img
-  variant="top"
-  src={product.images && product.images.length > 0 
-        ? `${url}/${product.images[0]}` 
-        : "https://via.placeholder.com/300"} // Fallback image
-  alt={product.productName}
-/>
-            <Card.Body>
-              <Card.Title>{product.productName}</Card.Title>
-              <Card.Text><strong>Description:</strong> {product.description}</Card.Text>
-              <Card.Text><strong>Quantity:</strong> {product.productQuantity}</Card.Text>
-              <Card.Text><strong>Expiry Date:</strong> {product.expiryDate}</Card.Text>
-              <Card.Text>
-                <strong>Price:</strong> ₹{product.price}{" "}
-                <span style={{ textDecoration: "line-through", color: "gray" }}>
-                  ₹{product.actualPrice}
-                </span>
-              </Card.Text>
-              <Button variant="primary" onClick={(e) =>handleAddToCart(product)}>
-                Add to Cart
-              </Button>
-              <Button
-                variant="success"
-                onClick={(e) => handleBuyNow(product._id)}
-                className="ml-3"
-              >
-                Buy Now
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
+    }
+  };
 
-        {/* Product Reviews */}
-        <Col md={6}>
-          <h3>Customer Reviews</h3>
-          {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <div key={index} className="review mb-3">
-                <p>
-                  <strong>{review.user}</strong> ({review.rating} stars):
-                </p>
-                <p>{review.comment}</p>
-              </div>
-            ))
-          ) : (
-            <p>No reviews yet. Be the first to review!</p>
-          )}
+  return (
+    <>
+      <UserHeader />
+      <Container className="product-details-page mt-5">
+        <Row className="justify-content-center">
+          <Col md={6} xs={12} className="mb-4">
+            <Card className="shadow-lg product-card">
+              {/* Image Slideshow */}
+              <Carousel>
+                {product.images && product.images.length > 1 ? (
+                  product.images.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <img
+                        className="d-block w-100 product-image"
+                        src={`${url}/${image}`}
+                        alt={`Slide ${index + 1}`}
+                      />
+                    </Carousel.Item>
+                  ))
+                ) : (
+                  <Card.Img
+                    variant="top"
+                    src={product.images?.length > 0 
+                      ? `${url}/${product.images[0]}` 
+                      : "https://via.placeholder.com/300"}
+                    alt={product.productName}
+                    className="product-image"
+                  />
+                )}
+              </Carousel>
+              <Card.Body className="product-details">
+                <Card.Title className="product-title">{product.productName}</Card.Title>
+                <Card.Text className="text-muted">{product.description}</Card.Text>
+                <Card.Text><strong>Expiry Date:</strong> {product.expiryDate}</Card.Text>
+                <Card.Text>
+                  <span className="product-price">₹{product.price}</span>{" "}
+                  <span className="product-actual-price">₹{product.actualPrice}</span>
+                </Card.Text>
+                <Card.Text>
+                  <strong>Expected Delivery Time:</strong> {expectedDeliveryTime}
+                </Card.Text>
 
-          {/* Add Review Form */}
-          <h4>Add Your Review</h4>
-          <Form>
-           
-            <Form.Group>
-              <Form.Label>Rating</Form.Label>
-              <Form.Control
-                as="select"
-                value={newReview.rating}
-                onChange={(e) =>
-                  setNewReview({ ...newReview, rating: e.target.value })
-                }
-              >
-                <option value="">Select rating</option>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
-              </Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Your Review</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Write your review here"
-                value={newReview.comment}
-                onChange={(e) =>
-                  setNewReview({ ...newReview, comment: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              className="mt-3"
-              onClick={handleAddReview}
-            >
-              Submit Review
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </div>
-        </>
-  )
+                <div className="quantity-selector mb-3">
+                  <Button 
+                    variant="outline-secondary" 
+                    onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+                  >
+                    −
+                  </Button>
+                  <span className="quantity-value">{quantity}</span>
+                  <Button 
+                    variant="outline-secondary" 
+                    onClick={() => setQuantity((prev) => prev + 1)}
+                  >
+                    +
+                  </Button>
+                </div>
+
+                <div className="button-group">
+                  <Button variant="primary" onClick={handleAddToCart}>
+                    Add to Cart
+                  </Button>
+                  <Button variant="success" onClick={() => handleBuyNow(product._id)}>
+                    Buy Now
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
 }
 
-export default ProductDetails
+export default ProductDetails;

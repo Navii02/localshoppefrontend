@@ -1,54 +1,53 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { AddProduct } from '../service/allApi';
-import { FaPlus } from 'react-icons/fa';
-import { TbCategory } from 'react-icons/tb';
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { AddProduct } from "../service/allApi";
+import { FaPlus } from "react-icons/fa";
 
 function AddProject() {
   const [show, setShow] = useState(false);
   const [images, setImages] = useState([]);
   const [ProductData, setProductData] = useState({
-    productName: '',
-    productQuantity: '',
-    actualPrice: '',
-    price: '',
-    expiryDate: '',
-    description: '',
-    address:'',
-    longitude:'',
-    latitude:'',
-    Category:''
+    productName: "",
+    productQuantity: "",
+    actualPrice: "",
+    price: "",
+    expiryDate: "",
+    description: "",
+    expectedDeliveryTime: "",
+    Category: "",
   });
 
-  const handleClose = () =>{
+  const handleClose = () => {
     setProductData({
-      productName: '',
-      productQuantity: '',
-      actualPrice: '',
-      price: '',
-      expiryDate: '',
-      description: '',
-        Category:''
-    })
-    setImages([])
+      productName: "",
+      productQuantity: "",
+      actualPrice: "",
+      price: "",
+      expiryDate: "",
+      description: "",
+      expectedDeliveryTime: "",
+      Category: "",
+    });
+    setImages([]);
+    setShow(false);
+  };
 
-    setShow(false)};
   const handleShow = () => setShow(true);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const newImages = files.map((file) => ({
-      file, 
+      file,
       preview: URL.createObjectURL(file),
     }));
-    setImages((prevImages) => [...prevImages, ...newImages]); 
+    setImages((prevImages) => [...prevImages, ...newImages]);
   };
 
   const handleImageRemove = (index) => {
     const imageToRemove = images[index];
-    URL.revokeObjectURL(imageToRemove.preview); 
-    setImages(images.filter((_, i) => i !== index)); 
+    URL.revokeObjectURL(imageToRemove.preview);
+    setImages(images.filter((_, i) => i !== index));
   };
 
   const handleInputChange = (e) => {
@@ -59,57 +58,63 @@ function AddProject() {
     }));
   };
 
-
-
   const handleSubmit = async () => {
-    const userDetails=JSON.parse(sessionStorage.getItem('userdetails'));
-   
+    if (
+      !ProductData.productName ||
+      !ProductData.productQuantity ||
+      !ProductData.actualPrice ||
+      !ProductData.price ||
+      !ProductData.expiryDate ||
+      !ProductData.description ||
+      !ProductData.expectedDeliveryTime ||
+      !ProductData.Category ||
+      images.length === 0
+    ) {
+      alert("Please fill all fields and upload at least one image.");
+      return;
+    }
 
+    const userDetails = JSON.parse(sessionStorage.getItem("userdetails"));
     const data = new FormData();
-    data.append('productName', ProductData.productName);
-    data.append('productQuantity', ProductData.productQuantity);
-    data.append('actualPrice', ProductData.actualPrice);
-    data.append('price', ProductData.price);
-    data.append('expiryDate', ProductData.expiryDate);
-    data.append('description', ProductData.description);
-    data.append(' Category', ProductData.Category);
-    data.append('address',userDetails.address);
-    data.append('latitude',userDetails.latitude);
-    data.append('longitude',userDetails.longitude)
+    data.append("productName", ProductData.productName);
+    data.append("productQuantity", ProductData.productQuantity);
+    data.append("actualPrice", ProductData.actualPrice);
+    data.append("price", ProductData.price);
+    data.append("expiryDate", ProductData.expiryDate);
+    data.append("description", ProductData.description);
+    data.append("expectedDeliveryTime", ProductData.expectedDeliveryTime);
+    data.append("Category", ProductData.Category);
+    data.append("address", userDetails.address);
+    data.append("latitude", userDetails.latitude);
+    data.append("longitude", userDetails.longitude);
 
-    // Append actual File objects
     images.forEach(({ file }) => {
-      data.append('images', file);
+      data.append("images", file);
     });
 
     const token = sessionStorage.getItem("token");
     const reqHeader = {
-      'Content-Type': 'multipart/form-data',
-      'Authorization': `Bearer ${token}`, // No need for Content-Type with FormData
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
     };
 
-    
-      const result = await AddProduct(data, reqHeader);
-      //console.log(result);
-      if(result.status ==200){
-        alert("product added successfully")
-        handleClose();
-      }else{
-        alert("Something went wrong")
-      }
+    const result = await AddProduct(data, reqHeader);
+    if (result.status === 200) {
+      alert("Product added successfully!");
+      handleClose();
+    } else {
+      alert("Something went wrong.");
     }
-
+  };
 
   return (
     <div>
-     <Button
-        
-      style={{backgroundColor: 'transparent',outline: 'none', borderColor:"transparent"}}
+      <Button
+        style={{ backgroundColor: "transparent", borderColor: "transparent" }}
         onClick={handleShow}
       >
         <FaPlus className="me-2" /> Add Product
       </Button>
-
 
       <Modal centered show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
@@ -119,15 +124,12 @@ function AddProject() {
           <div className="container">
             <div className="row">
               <div className="col d-flex flex-column justify-content-center align-items-center">
-                <label
-                  htmlFor="projectimages"
-                  className="d-flex flex-column justify-content-center align-items-center"
-                >
+                <label htmlFor="projectimages">
                   <input
                     type="file"
                     id="projectimages"
                     className="d-none"
-                    multiple // Enable multiple file uploads
+                    multiple
                     onChange={handleImageChange}
                   />
                   <img
@@ -138,12 +140,15 @@ function AddProject() {
                 </label>
                 <div className="mt-3 w-100">
                   {images.map((image, index) => (
-                    <div key={index} className="d-flex align-items-center mt-2">
+                    <div
+                      key={index}
+                      className="d-flex align-items-center mt-2"
+                    >
                       <img
-                        src={image.preview} // Use the preview URL
+                        src={image.preview}
                         alt={`Uploaded ${index}`}
                         className="img-thumbnail me-2"
-                        style={{ width: '100px', height: '100px' }}
+                        style={{ width: "100px", height: "100px" }}
                       />
                       <Button
                         variant="danger"
@@ -156,7 +161,7 @@ function AddProject() {
                   ))}
                 </div>
                 <div className="mt-3 w-100 form-control rounded">
-                <input
+                  <input
                     type="text"
                     placeholder="Category"
                     name="Category"
@@ -181,7 +186,7 @@ function AddProject() {
                     onChange={handleInputChange}
                   />
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Product Actual Price"
                     name="actualPrice"
                     className="form-control rounded mt-3"
@@ -189,7 +194,7 @@ function AddProject() {
                     onChange={handleInputChange}
                   />
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Product Price"
                     name="price"
                     className="form-control rounded mt-3"
@@ -197,11 +202,19 @@ function AddProject() {
                     onChange={handleInputChange}
                   />
                   <input
-                    type="text"
+                    type="date"
                     placeholder="Product Expiry Date"
                     name="expiryDate"
                     className="form-control rounded mt-3"
                     value={ProductData.expiryDate}
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Expected Delivery Time"
+                    name="expectedDeliveryTime"
+                    className="form-control rounded mt-3"
+                    value={ProductData.expectedDeliveryTime}
                     onChange={handleInputChange}
                   />
                   <textarea

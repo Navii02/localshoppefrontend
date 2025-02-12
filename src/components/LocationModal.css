@@ -1,0 +1,70 @@
+/* Modal Background */
+.modal-container {
+  position: fixed;
+  margin-top: 200px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Show modal when open */
+.modal-container.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal Box */
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+  margin-top: 20px;
+}
+
+/* Heading */
+.modal-content h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Close Button */
+.close-btn {
+  margin-top: 15px;
+  padding: 8px 15px;
+  background: #ff5f5f;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  background: #e04848;
+}
+
+/* Modal Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,76 +1,150 @@
-import { Link } from "react-router-dom"
-import { Box, TextField,Button} from "@mui/material";
-//import React from 'react'
+import { Link, useNavigate, } from "react-router-dom";
+import { Box, TextField, Button, Typography, Paper } from "@mui/material";
+import { useState ,useContext} from "react";
+import { adminlogin, adminregister } from "../../service/allApi";
+import "./AdminRegistration.css"; // Import the CSS file
+import { loginResponseContext } from "../../context/ContextShare";
 
-function AdminRegistration({register}) {
+function AdminRegistration({ register }) {
+  const {setLoginResponse}=useContext(loginResponseContext)
+  const navigate = useNavigate();
+  const [details, setDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleRegister = async () => {
+    const { username, email, password, confirmPassword } = details;
+    if (!username || !email || !password || !confirmPassword) {
+      alert("Please fill out the form completely.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Passwords must match.");
+      return;
+    }
+    try {
+      const result = await adminregister(details);
+      if (result.status === 200) {
+        alert("Registration Successful!");
+        setDetails({ username: "", email: "", password: "", confirmPassword: "" });
+        sessionStorage.setItem("userdetails", JSON.stringify(result.data.newUser));
+        sessionStorage.setItem("token", result.data.token);
+        navigate("/admin/login");
+      } else if (result.status === 406) {
+        alert("User is already registered.");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Registration Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  };
+
+  const handleLogin = async () => {
+    const { email, password } = details;
+    if (!email || !password) {
+      alert("Please fill out the form completely.");
+      return;
+    }
+    try {
+      const result = await adminlogin(details);
+      if (result.status === 200) {
+        alert("Login Successful!");
+        setDetails({ username: "", email: "", password: "", confirmPassword: "" });
+        sessionStorage.setItem("userdetails", JSON.stringify(result.data.existingUser));
+        sessionStorage.setItem("token", result.data.token);
+        navigate("/admin");
+        setLoginResponse(true)
+      } else if (result.status === 406) {
+        alert("Invalid email or password.");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  };
+
   return (
-    <>
-      <div className="container-fluid d-flex justify-content-center align-items-center vh-100 p-5">
-      <div className="col-lg-4 col-md-6 col-sm-10 p-3 rounded"style={{background:"#F9F6E6"}}>
-      {register ? <h1 className="text-center mb-4">Sign Up</h1>:
-        <h1 className="text-center mb-4">Sign In</h1>}
+    <div className="registration-container">
+      <Paper elevation={6} className="form-card">
+        <Typography variant="h4" className="form-title">
+          {register ? "Sign Up" : "Sign In"}
+        </Typography>
+
         <Box component="form" noValidate autoComplete="off">
-        {register &&<div>
-       
-             <TextField
-            fullWidth
-            margin="normal"
-            id="Username"
-            label="Username"
-            variant="outlined"
-            type="text"
-          />
-          </div>}
+          {register && (
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Username"
+              variant="outlined"
+              type="text"
+              value={details.username}
+              onChange={(e) => setDetails({ ...details, username: e.target.value })}
+            />
+          )}
           <TextField
             fullWidth
             margin="normal"
-            id="email"
             label="Email"
             variant="outlined"
             type="email"
+            value={details.email}
+            onChange={(e) => setDetails({ ...details, email: e.target.value })}
           />
           <TextField
             fullWidth
             margin="normal"
-            id="password"
             label="Password"
             type="password"
             variant="outlined"
+            value={details.password}
+            onChange={(e) => setDetails({ ...details, password: e.target.value })}
           />
-          { register && <TextField
-            fullWidth
-            margin="normal"
-            id="confirm password"
-            label="confirm Password"
-            type="password"
-            variant="outlined"
-          />}
-          <div className="d-flex justify-content-center mt-4">
-            <Button variant="contained" color="success" className="w-50">
-            {!register ? "Sign In" : "Sign Up"}
+          {register && (
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              value={details.confirmPassword}
+              onChange={(e) => setDetails({ ...details, confirmPassword: e.target.value })}
+            />
+          )}
+          <div className="btn-container">
+            <Button
+              variant="contained"
+              color="success"
+              className="submit-btn"
+              onClick={register ? handleRegister : handleLogin}
+            >
+              {register ? "Sign Up" : "Sign In"}
             </Button>
           </div>
-          {!register &&<div className="text-center mt-3">
-            <Link to="/forgotpassword" className="text-decoration-none">
-              <small>Forgot Password?</small>
+
+          {!register && (
+            <div className="text-center">
+              <Link to="/forgotpassword" className="link">
+                Forgot Password?
+              </Link>
+            </div>
+          )}
+          <div className="text-center">
+            <Link to={register ? "/admin/login" : "/admin/register"} className="link">
+              {register ? "Already have an account? Sign In" : "New User? Sign Up"}
             </Link>
-          </div>}
-          <div className="d-flex justify-content-center mt-3">
-                <Link
-                  to={!register ? "/admin/register" : "/admin/login"}
-                  className="text-decoration-none text-primary"
-                >
-                  <small>
-                    {!register ? "New User? Click Here to Sign Up" : "Already User? Click Here to Sign In"}
-                  </small>
-                </Link>
-              </div>
+          </div>
         </Box>
-      </div>
+      </Paper>
     </div>
-      
-    </>
-  )
+  );
 }
 
-export default AdminRegistration
+export default AdminRegistration;

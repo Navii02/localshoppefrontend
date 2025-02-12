@@ -68,7 +68,7 @@ function BusinessRegisteration({ register }) {
       const result = await businessLogin(Details);
       console.log(result);
       if (result.status == 200) {
-        alert("Login Sucessful");
+       
         setDetails({
           businessname: "",
           username: "",
@@ -98,8 +98,18 @@ function BusinessRegisteration({ register }) {
         userDetails.LicenseImg &&
         userDetails.PancardImg &&
         userDetails.photo
+
       ) {
-        Navigate("/business");
+      if(userDetails.status == "approved"){
+        alert("Login Sucessful");
+        Navigate('/business')
+      }
+      else if(userDetails.status == "Pending"){
+        alert("Your Account is Under reviewing session. Please wait for  your account get activated.")
+      }
+      else{
+        alert("Your Account is is not satisfiy recommended creteria")
+      }
       } else {
         Navigate("/business/registrationpage");
       }

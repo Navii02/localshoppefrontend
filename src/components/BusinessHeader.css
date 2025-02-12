@@ -1,77 +1,64 @@
-/* Navbar styles */
 .business-navbar {
-    background: linear-gradient(135deg, #34495e, #2c3e50);
-    border-bottom: 2px solid #f39c12;
-  }
-  
-  .navbar-brand-custom {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #f39c12;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-  }
-  
-  .brand-icon {
-    font-size: 1.8rem;
-    margin-right: 10px;
-  }
-  
-  .custom-nav-link {
-    color: #ecf0f1;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .custom-nav-link:hover {
-    color: #f39c12;
-    transform: scale(1.1);
-  }
-  
-  .custom-dropdown-title {
-    color: #ecf0f1;
-    font-size: 1rem;
-    font-weight: 500;
-  }
-  
-  .navbar-toggler {
-    border-color: #f39c12;
-  }
-  
-  .navbar-toggler-icon {
-    background-image: linear-gradient(to bottom, #f39c12, #ecf0f1);
-  }
-  
-  .nav-dropdown-item {
-    color: #34495e !important;
-    font-size: 0.95rem;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-  
-  .nav-dropdown-item:hover {
-    background-color: #f39c12;
-    color: #2c3e50;
-  }
-  
-  .dropdown-divider {
-    border-color: rgba(255, 255, 255, 0.15);
-  }
-  
-  /* AddProject button */
-  button.add-project-btn {
-    background: transparent;
-    border: 2px solid #f39c12;
-    color: #f39c12;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-  
-  button.add-project-btn:hover {
-    background: #f39c12;
-    color: #ecf0f1;
-  }
-  
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  padding: 10px 0;
+}
+
+.navbar-brand-custom {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-brand-custom .brand-icon {
+  font-size: 1.8rem;
+}
+
+.custom-nav-link {
+  font-size: 1rem;
+  font-weight: 500;
+  color: white !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-nav-link:hover {
+  color: #2b2b2b !important;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  padding: 8px 12px;
+}
+
+.custom-dropdown-title {
+  color: white !important;
+  font-weight: 500;
+}
+
+.navbar-nav .dropdown-menu {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu .dropdown-item {
+  color: #333;
+  font-size: 0.95rem;
+  transition: background 0.3s ease-in-out;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: #feb47b;
+  color: white;
+}
+
+.logout-link {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  padding: 8px 12px;
+}
+
+.logout-link:hover {
+  background: #e63946;
+  color: white !important;
+}

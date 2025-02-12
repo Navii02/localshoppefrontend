@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import LocationPicker from "./LocationPicker";
-import "./LocationModel.css";
+import "./LocationModal.css";
 import { Savelocation } from "../service/allApi";
 import { useNavigate } from "react-router-dom";
-function LocationModal() {
+function LocationModal({setLocationStatus}) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [address, setAddress] = useState("");
@@ -39,6 +39,7 @@ function LocationModal() {
 
       const result = await Savelocation(reqBody, reqHeader);
       console.log(result);
+      setLocationStatus(result)
     } else {
       alert("Please Login First");
       Navigate('/login');
@@ -50,6 +51,7 @@ function LocationModal() {
     if (sessionStorage.getItem("savedLocation")) {
       setIsModalOpen(false);
       const userdetails = sessionStorage.getItem("userdetails");
+    
       
       if (userdetails) {
         const parsedUserDetails = JSON.parse(userdetails);
@@ -65,6 +67,7 @@ function LocationModal() {
   return (
     <div>
       <LocationPicker
+          setLocationStatus={setLocationStatus}
         location={location}
         isOpen={isModalOpen}
         setSavedLocation={setSavedLocation}

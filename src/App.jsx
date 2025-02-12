@@ -17,11 +17,20 @@ import ProductDetails from "./Pages/User/ProductDetails";
 import PaymentPage from "./Pages/User/PaymentPage";
 import OrderPage from "./Pages/Business/OrderPage";
 import ProfilePage from "./Pages/User/ProfilePage";
+import { Approval } from "./Pages/Admin/Approval";
+import BusinessusersPage from "./Pages/Admin/BusinessusersPage";
+import Userpage from "./Pages/Admin/Userpage";
+import { loginResponseContext } from "./context/ContextShare";
+import { useContext } from "react";
+import Profile from "./Pages/Business/Profile";
+import ProductReviews from "./Pages/Business/ProductReviews";
 
 
 
 
 function App() {
+  const {loginResponse}=useContext(loginResponseContext)
+
   return (
     <>
       <Routes>
@@ -44,13 +53,18 @@ function App() {
         <Route path="/business/registrationpage" element={<BusinessRegisterationForm/>} />
         <Route path="/business/products" element={<ProductPage/>} />
         <Route path="/business/orders" element={<OrderPage/>} />
+        <Route path="/business/profile" element={<Profile/>} />
+        <Route path="/business/reviews" element={<ProductReviews/>} />
         
 
 
         {/* Admin */}
-        <Route path="/admin" element={<AdminHome />} />
+        <Route path="/admin" element={loginResponse?<AdminHome />:<Pagentfound/>} />
         <Route path="/admin/login" element={<AdminRegistration />} />
         <Route path="/admin/register"element={<AdminRegistration register={true} />}/>
+        <Route path="/admin/approval" element={loginResponse?<Approval/>:<Pagentfound/>} />
+        <Route path="/admin/businessusers" element={loginResponse?<BusinessusersPage/>:<Pagentfound/>}/>
+        <Route path="/admin/users" element={loginResponse?<Userpage/>:<Pagentfound/>}/>
 
 
         <Route path="*" element={<Pagentfound />} />

@@ -1,0 +1,86 @@
+/* PaymentPage.css */
+
+.payment-container {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.payment-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.payment-card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.payment-card .card-body {
+  padding: 20px;
+}
+
+.payment-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #444;
+}
+
+.payment-card-text {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.payment-form {
+  padding: 20px;
+}
+
+.payment-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  resize: none;
+}
+
+.payment-method-group {
+  margin-top: 15px;
+}
+
+.payment-method-group label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #444;
+}
+
+.payment-button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out;
+}
+
+.payment-button:hover {
+  background-color: #0056b3;
+}

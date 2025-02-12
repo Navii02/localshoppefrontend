@@ -1,0 +1,39 @@
+/* Wishlist Page Styles */
+.wishlist-container {
+ 
+    margin: 100px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.wishlist-container:hover {
+    transform: scale(1.01);
+}
+
+/* Wishlist Title */
+.wishlist-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Wishlist Grid */
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Empty Wishlist Text */
+.empty-wishlist-text {
+    font-size: 18px;
+    color: #777;
+    margin-top: 20px;
+}

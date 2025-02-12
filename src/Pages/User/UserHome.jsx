@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserCards from "../../components/UserCards";
 import UserFooter from "../../components/UserFooter";
 import UserHeader from "../../components/UserHeader";
 import Carousel from "react-bootstrap/Carousel";
-import "./UserHome.css"; // Custom CSS file for styling
 import LocationModal from "../../components/LocationModal";
 import { project } from "../../service/allApi";
+import "./UserHome.css";
 
 function UserHome() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [locationstatus, setLocationStatus] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,11 +30,10 @@ function UserHome() {
           },
           params: userLocation ? { location: userLocation } : {},
         };
-        console.log(requestOptions);
 
         const result = await project(requestOptions);
         setProducts(result.data.products || []);
-        setFilteredProducts(result.data.products || []); // Initially set filtered products to all products
+        setFilteredProducts(result.data.products || []);
       } catch (error) {
         console.error("Error fetching products:", error);
         setError("Failed to fetch products. Please try again later.");
@@ -42,95 +43,110 @@ function UserHome() {
     };
 
     fetchProducts();
-  }, []);
+  }, [locationstatus]);
 
   useEffect(() => {
-    // Filter products whenever the search term changes
-    const filtered = products.filter((product) =>
-      product.productName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    filterProducts();
+  }, [searchTerm, selectedCategory, products]);
+
+  const handleCategorySelection = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filterProducts = () => {
+    const filtered = products.filter((product) => {
+      const productNameMatch = product.productName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const categoryMatch = product.Category
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const categoryFilter =
+        selectedCategory === "All" || product.Category === selectedCategory;
+
+      return (productNameMatch || categoryMatch) && categoryFilter;
+    });
+
     setFilteredProducts(filtered);
-  }, [searchTerm, products]);
+  };
+
+  const allCategories = [
+    "All",
+    ...new Set(products.map((product) => product.Category)),
+  ];
 
   return (
     <>
-      <div className="position-relative">
-        {/* Header */}
+      <div className="user-home">
         <UserHeader setSearchTerm={setSearchTerm} />
-        {/* Carousel */}
-        <Carousel className="custom-carousel" style={{ marginTop: "88px" }}>
-          <Carousel.Item interval={2000}>
-            <div className="carousel-overlay">
-              <img
-                className="d-block w-100 custom-carousel-image"
-                src="https://blog.hubspot.com/hubfs/ecommerce-10.jpg"
-                alt="First slide"
-              />
-              <div className="carousel-caption-custom">
-                <h2>Discover the Latest Trends</h2>
-                <p>Shop the best products for your lifestyle.</p>
-              </div>
-            </div>
+
+        <Carousel className="custom-carousel">
+          <Carousel.Item interval={2500}>
+            <img
+              className="d-block w-100"
+              src="https://blog.hubspot.com/hubfs/ecommerce-10.jpg"
+              alt="Trendy Products"
+            />
           </Carousel.Item>
-          <Carousel.Item interval={2000}>
-            <div className="carousel-overlay">
-              <img
-                className="d-block w-100 custom-carousel-image"
-                src="https://th.bing.com/th/id/OIP.eRgaZTkTMAQaaiqkJwUy5wAAAA?w=450&h=300&rs=1&pid=ImgDetMain"
-                alt="Second slide"
-              />
-              <div className="carousel-caption-custom">
-                <h2>Unbeatable Deals</h2>
-                <p>Find exclusive discounts and offers here.</p>
-              </div>
-            </div>
-          </Carousel.Item>
-          <Carousel.Item interval={2000}>
-            <div className="carousel-overlay">
-              <img
-                className="d-block w-100 custom-carousel-image"
-                src="https://wallpaperaccess.com/full/2593068.jpg"
-                alt="Third slide"
-              />
-              <div className="carousel-caption-custom">
-                <h2>Elevate Your Shopping Experience</h2>
-                <p>Explore a variety of products for every need.</p>
-              </div>
-            </div>
+          <Carousel.Item interval={2500}>
+            <img
+              className="d-block w-100"
+              src="https://th.bing.com/th/id/OIP.eRgaZTkTMAQaaiqkJwUy5wAAAA?w=450&h=300&rs=1&pid=ImgDetMain"
+              alt="Exclusive Deals"
+            />
           </Carousel.Item>
         </Carousel>
 
-        {/* Cards Section */}
-        <div className="container my-5">
-          <h2 className="text-center mb-4">Featured Products</h2>
-          {loading ? (
-            <div className="text-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          ) : error ? (
-            <p className="text-center text-danger">{error}</p>
-          ) : filteredProducts?.length > 0 ? (
-            <div className="row g-4">
-              {filteredProducts.map((product) => (
-                <div className="col-sm-6 col-md-4 col-lg-3" key={product._id}>
-                  <UserCards products={product} />
-                </div>
+        <div className="content-container">
+          {/* Category Sidebar */}
+          <div className="category-sidebar">
+            <h4>Categories</h4>
+            <ul>
+              {allCategories.map((category) => (
+                <li
+                  key={category}
+                  className={
+                    selectedCategory === category ? "active" : ""
+                  }
+                  onClick={() => handleCategorySelection(category)}
+                >
+                  {category}
+                </li>
               ))}
-            </div>
-          ) : (
-            <p className="text-center">No products available</p>
-          )}
+            </ul>
+          </div>
+
+          {/* Product Section */}
+          <div className="product-section">
+            <h2 className="section-title">Products</h2>
+            {loading ? (
+              <div className="loading-container">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : error ? (
+              <p className="error-message">{error}</p>
+            ) : filteredProducts.length > 0 ? (
+              <div className="row g-4">
+                {filteredProducts.map((product) => (
+                  <div
+                    className="col-sm-6 col-md-4 col-lg-3"
+                    key={product._id}
+                  >
+                    <UserCards products={product} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center">No products available</p>
+            )}
+          </div>
         </div>
 
-        {/* Footer */}
         <UserFooter />
-      </div>
-
-      {/* Location Modal */}
-      <div className="position-absolute location-modal">
-        <LocationModal />
+        <LocationModal setLocationStatus={setLocationStatus} />
       </div>
     </>
   );

@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
 import "./LocationPicker.css"; // For additional styling
 
-const LocationPicker = ({ isOpen, onClose, onSave, location, setSavedLocation }) => {
+const LocationPicker = ({ isOpen, onClose, onSave,setSavedLocation,setLocationStatus }) => {
   const [position, setPosition] = useState([10.8505, 76.2711]); // Default: Kerala
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [address, setAddress] = useState("");
-  const Location  =location
-  const Savedaddress=Location.address
-  console.log(Location);
+  const user =JSON.parse(sessionStorage.getItem("userdetails"))||"No saved user"
+  const Location=user?.location
+  const Savedaddress=Location?.address||"no saved Location"
+  console.log(Savedaddress);
   
   // Fix for marker icon issue in Leaflet
   const customIcon = new L.Icon({
@@ -44,8 +46,9 @@ const LocationPicker = ({ isOpen, onClose, onSave, location, setSavedLocation })
   };
 
   const useSavedLocation = () => {
-    sessionStorage.setItem("savedLocation", JSON.stringify(location));
-    setSavedLocation(location);
+    sessionStorage.setItem("savedLocation", JSON.stringify(Location));
+    setSavedLocation(Location);
+    setLocationStatus(Location)
   };
 
   // Fetch address from coordinates
@@ -94,7 +97,7 @@ const LocationPicker = ({ isOpen, onClose, onSave, location, setSavedLocation })
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>Set Location</h2>
+        <h2 className="text-danger">Set Location</h2>
 
         {/* Search Bar */}
         <input
@@ -149,11 +152,11 @@ const LocationPicker = ({ isOpen, onClose, onSave, location, setSavedLocation })
           <strong>Selected Location:</strong> {position[0]}, {position[1]}
         </p>
         
-        {location ? (
-          <div className="saved-location">
-            <h3>Saved Location</h3>
+        {Location ? (
+          <div className="saved-location text-light">
+            <h3 className="text-light">Saved Location</h3>
             Address:{Savedaddress}
-            <button className="btn use-btn" onClick={useSavedLocation}>
+            <button className="btn btn-info use-btn mt-5" onClick={useSavedLocation}>
               Use Saved Location
             </button>
           </div>
@@ -162,10 +165,10 @@ const LocationPicker = ({ isOpen, onClose, onSave, location, setSavedLocation })
         )}
 
         <div className="modal-buttons">
-          <button className="btn close-btn" onClick={onClose}>
+          <button className="btn btn-danger close-btn" onClick={onClose}>
             Close
           </button>
-          <button className="btn save-btn" onClick={() => onSave(position, address)}>
+          <button className="btn btn-primary save-btn" onClick={() => onSave(position, address)}>
             Save Location
           </button>
         </div>

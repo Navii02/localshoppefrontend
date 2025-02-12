@@ -1,66 +1,59 @@
-/* General Styles */
-body {
-  font-family: "Poppins", sans-serif;
-  background-color: #f9f9f9;
+.user-home {
+  padding: 20px;
+}
+
+.custom-carousel img {
+  height: 400px;
+  object-fit: cover;
+}
+
+.content-container {
+  display: flex;
+}
+
+.category-sidebar {
+  flex: 1;
+  max-width: 250px;
+  margin-right: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-sidebar h4 {
+  margin-bottom: 15px;
   color: #333;
 }
 
-/* Carousel Styles */
-.custom-carousel {
-  max-height: 500px;
-  overflow: hidden;
+.category-sidebar ul {
+  list-style: none;
+  padding: 0;
 }
 
-.custom-carousel-image {
-  object-fit: cover;
-  height: 500px;
+.category-sidebar ul li {
+  padding: 8px;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.3s;
 }
 
-.carousel-overlay {
-  position: relative;
-}
-
-.carousel-caption-custom {
-  position: absolute;
-  bottom: 20%;
-  left: 10%;
+.category-sidebar ul li.active,
+.category-sidebar ul li:hover {
+  background: #007bff;
   color: white;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
-  background: rgba(0, 0, 0, 0.5);
-  padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
-/* Cards Section */
-.container {
-  max-width: 1200px;
+.subcategory-list {
+  padding-left: 15px;
 }
 
-.row.g-4 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.product-section {
+  flex: 3;
 }
 
-/* Footer Styles */
-footer {
-  background-color: #333;
-  color: white;
-  padding: 20px 0;
-  text-align: center;
-}
-
-footer a {
-  color: #f9a825;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-/* Location Modal */
-.location-modal {
-  bottom: 10px;
-  right: 10px;
+.section-title {
+  color: #333;
+  margin-bottom: 20px;
 }

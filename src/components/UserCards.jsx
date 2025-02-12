@@ -1,78 +1,92 @@
-import './UserCard.css'; // Import the CSS file for styling
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faStar } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
-import { url } from '../service/ServiceUrl';
-import { Whishlistapi } from '../service/allApi';
-
+/* eslint-disable react/prop-types */
+import "./UserCard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { url } from "../service/ServiceUrl";
+import { Whishlistapi, RemoveFromWishlistApi } from "../service/allApi";
 
 function UserCards({ products }) {
-    const [isLiked, setIsLiked] = useState(false); // State to track the like status
-    const navigate = useNavigate(); // Initialize navigate
+    const [isLiked, setIsLiked] = useState(false);
+    const navigate = useNavigate();
 
-    // Handle the heart click to toggle the like status
-    const handleHeartClick = async(e) => {
-        //e.stopPropagation(); // Prevent triggering card click
-        if(isLiked){
-            setIsLiked(false); 
+    const userDetails = JSON.parse(sessionStorage.getItem("userdetails"));
+    const currentUserId = userDetails?._id;
 
-        }else{
-            setIsLiked(true); 
-            if(sessionStorage.getItem('token')){
-                const token = sessionStorage.getItem('token');
-                const reqHeader = {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                  }
-                  const result = await Whishlistapi(products,reqHeader)
-                  console.log(result);
-                  
-            }
+    useEffect(() => {
+        setIsLiked(products.WishlistUserId?.includes(currentUserId));
+    }, [products, currentUserId]);
 
-        }
-        // Toggle the state value
+    const getAverageRating = () => {
+        if (!products.reviews || products.reviews.length === 0) return 0;
+        const totalRating = products.reviews.reduce((sum, review) => sum + parseFloat(review.rating || 0), 0);
+        return (totalRating / products.reviews.length).toFixed(1);
     };
 
-    // Handle card click to navigate to product details page
-    const handleCardClick = (e) => {
-        if(sessionStorage.getItem('token')){
-            //console.log(products._id );
-            const productId=products._id;
-            navigate(`/productsdetail/${productId}`);; 
-        }else
-        {
-            navigate('/login')
+    const averageRating = getAverageRating();
+    const isOutOfStock = products.productQuantity == 0;
+
+    const handleHeartClick = async (e) => {
+        e.stopPropagation();
+        if (!currentUserId) {
+            alert("Please login first");
+            return;
         }
-       
-        
-      // Navigate to the product details page
+
+        setIsLiked((prev) => !prev);
+
+        const token = sessionStorage.getItem("token");
+        const reqHeader = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        };
+
+        try {
+            if (!isLiked) {
+                const result = await Whishlistapi(products, reqHeader);
+                if (result.status !== 200) setIsLiked(false);
+            } else {
+                const reqBody = { productId: products._id };
+                const result = await RemoveFromWishlistApi(reqBody, reqHeader);
+                if (result.status !== 200) setIsLiked(true);
+            }
+        } catch (error) {
+            console.error("Error updating wishlist:", error);
+            setIsLiked(!isLiked);
+        }
+    };
+
+    const handleCardClick = () => {
+        if (isOutOfStock) return; // Prevent navigation if out of stock
+        if (sessionStorage.getItem("token")) {
+            navigate(`/productsdetail/${products._id}`);
+        } else {
+            navigate("/login");
+        }
     };
 
     return (
-        <div className="product-card" > {/* Add onClick event */}
+        <div className={`product-card ${isOutOfStock ? "out-of-stock" : ""}`} onClick={handleCardClick}>
             <div className="product-image-container">
-                <img
-                    src={`${url}/${products.images[0]}`}
-                    alt="product"
-                    className="product-image"
-                />
+                <img src={`${url}/${products.images[0]}`} alt={products.productName} className="product-image" />
+                {isOutOfStock && <div className="out-of-stock-overlay">Out of Stock</div>}
                 <FontAwesomeIcon
                     icon={faHeart}
-                    className={`heart-icon ${isLiked ? 'liked' : ''}`} // Add class based on like status
-                    onClick={(e)=>{handleHeartClick(products)}} // Add onClick handler to toggle the state
+                    className={`heart-icon ${isLiked ? "liked" : ""}`}
+                    onClick={handleHeartClick}
                 />
             </div>
-            <div className="product-card-body"onClick={()=>handleCardClick(products)}>
-                <div className="product-title">{products.productName}</div>
+            <div className="product-card-body">
+                <h3 className="product-title">{products.productName}</h3>
                 <div className="product-price">
-                    <span className="current-price">Rs {products.price}</span>
-                    <span className="old-price">Rs {products.actualPrice}</span>
+                    <span className="current-price">₹{products.price}</span>
+                    <span className="old-price">₹{products.actualPrice}</span>
                 </div>
                 <div className="product-rating">
                     <FontAwesomeIcon icon={faStar} className="star-icon" />
-                    <span className="rating-score">4.5</span>
-                    <span className="rating-reviews">(100 reviews)</span>
+                    <span className="rating-score">{averageRating}</span>
+                    <span className="rating-reviews">({products.reviews?.length || 0} reviews)</span>
                 </div>
             </div>
         </div>

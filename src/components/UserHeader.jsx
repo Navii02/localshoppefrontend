@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Container from "react-bootstrap/Container";
@@ -9,10 +10,12 @@ import { Link, useNavigate } from "react-router-dom";
 
 function UserHeader({setSearchTerm}) {
   const navigate =useNavigate()
+
   const handleLogout=()=>{
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('userdetails');
     sessionStorage.removeItem('savedLocation');
+    window.location.reload();
     navigate("/")
 
   }

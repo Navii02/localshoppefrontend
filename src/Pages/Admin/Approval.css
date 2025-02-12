@@ -1,0 +1,121 @@
+.approval-container {
+   
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    margin: auto;
+  }
+  
+  .approval-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #131212;
+    margin-bottom: 20px;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .approval-table {
+    width: 100%;
+    color: #131212;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .approval-table thead {
+    background-color: #465463;
+    color: white;
+  }
+  
+  .approval-table th,
+  .approval-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+  .approval-table td:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .thumbnail {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .thumbnail:hover {
+    transform: scale(1.1);
+  }
+  
+  .user-photo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .user-photo:hover {
+    transform: scale(1.1);
+  }
+  
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .approve-btn,
+  .reject-btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .approve-btn {
+    background-color: #28a745;
+    color: rgb(1, 1, 1);
+    border: none;
+  }
+  
+  .approve-btn:hover {
+    background-color: #218838;
+  }
+  
+  .reject-btn {
+    background-color: #dc3545;
+    color: rgb(12, 12, 12);
+    
+    border: none;
+  }
+  
+  .reject-btn:hover {
+    background-color: #c82333;
+  }
+  
+  /* Modal Styling */
+  .modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .fullscreen-image {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+  }
+  

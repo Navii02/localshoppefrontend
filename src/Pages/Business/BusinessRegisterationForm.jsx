@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { BusinessRegistration } from "../../service/allApi";
 import { useNavigate } from "react-router-dom";
 
@@ -86,7 +86,7 @@ function BusinessRegisterationForm() {
   console.log(result);
   if(result.status == 200) {
     alert("Registration Successful And waiting for the Admin Approval")
-    navigate("/business")
+    navigate("/business/login")
   }else{
     alert("something went wrong")
   }

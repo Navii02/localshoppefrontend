@@ -1,0 +1,103 @@
+/* General container styling */
+.order-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #f0f0f0, #d9e2ec);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Order box */
+  .order-box {
+    width: 90%;
+    max-width: 1200px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* Title styling */
+  .order-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Search Bar */
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+  }
+  
+  .search-bar input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Table Styling */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  thead {
+    background-color: #2d3748;
+    color: white;
+  }
+  
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  tbody tr:hover {
+    background-color: #f9f9f9;
+    transition: 0.3s;
+  }
+  
+  /* Price styling */
+  .price {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  /* Order Status */
+  .delivered {
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .pending {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
+  /* No Orders Message */
+  .no-orders {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-size: 18px;
+  }
+  

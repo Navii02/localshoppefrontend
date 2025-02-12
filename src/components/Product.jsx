@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import Carousel from "react-bootstrap/Carousel"; // For displaying multiple images
+import Carousel from "react-bootstrap/Carousel";
 import "./Product.css";
 import { url } from "../service/ServiceUrl";
 import EditProduct from "./EditProduct";
@@ -10,8 +10,9 @@ import { DeleteProduct } from "../service/allApi";
 import { useState } from "react";
 
 function Product({ product }) {
-  const {setDeletestatus}=useContext(deletedResponseContext)
-    const {editResponse}=useContext(editResponseContext)
+  const { setDeletestatus } = useContext(deletedResponseContext);
+  const { editResponse } = useContext(editResponseContext);
+
   const {
     productName,
     description,
@@ -20,31 +21,27 @@ function Product({ product }) {
     images,
     productQuantity,
   } = product;
-  const handleDelete = async (id)=>{
+
+  const handleDelete = async (id) => {
     if (sessionStorage.getItem("token")) {
-      const token =sessionStorage.getItem("token");
-  
-    const reqHeader = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    }
-      const result= await DeleteProduct(id,reqHeader);
-      if(result.status==200) {
-        alert("Product deleted successfully")
-        setDeletestatus(result)
-      }else{
-        alert("Something went wrong")
+      const token = sessionStorage.getItem("token");
+
+      const reqHeader = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const result = await DeleteProduct(id, reqHeader);
+      if (result.status === 200) {
+        alert("Product deleted successfully");
+        setDeletestatus(result);
+      } else {
+        alert("Something went wrong");
       }
-      
-    
-  }
-  }
+    }
+  };
 
-useEffect(()=>{
-
-},[editResponse])
-  
-  
+  useEffect(() => {}, [editResponse]);
 
   return (
     <Card className="product-card">
@@ -70,22 +67,16 @@ useEffect(()=>{
       )}
       <Card.Body>
         <Card.Title className="product-title">{productName}</Card.Title>
-        <Card.Text className="product-text">{description}</Card.Text>
-        <ListGroup className="list-group-flush product-list">
-          <ListGroup.Item>
-            <strong>Price:</strong> ₹{price}
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <strong>Actual Price:</strong> ₹{actualPrice}
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <strong>Quantity:</strong> {productQuantity}
-          </ListGroup.Item>
+        <Card.Text className="product-description">{description}</Card.Text>
+        <ListGroup className="product-list">
+          <ListGroup.Item><strong>Price:</strong> ₹{price}</ListGroup.Item>
+          <ListGroup.Item><strong>Actual Price:</strong> ₹{actualPrice}</ListGroup.Item>
+          <ListGroup.Item><strong>Quantity:</strong> {productQuantity}</ListGroup.Item>
         </ListGroup>
       </Card.Body>
       <Card.Body className="product-buttons">
-        <button className="btn btn-success product-btn"><EditProduct productData={product}/></button>
-        <button className="btn btn-danger product-btn"onClick={(e)=>(handleDelete(product._id))}>Delete</button>
+        <button className="edit-btn"><EditProduct productData={product} /></button>
+        <button className="delete-btn" onClick={() => handleDelete(product._id)}>Delete</button>
       </Card.Body>
     </Card>
   );

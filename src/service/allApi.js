@@ -9,6 +9,13 @@ export const businessLogin = async(reqBody)=>{
     return await commonApi("POST",`${url}/business-login`,reqBody,"")
 
 }
+export const adminregister=async(reqBody)=>{
+    return await commonApi("POST",`${url}/admin-register`,reqBody,"")
+}
+export const adminlogin = async(reqBody)=>{
+    return await commonApi("POST",`${url}/admin-login`,reqBody,"")
+
+}
 export const BusinessRegistration=async(reqBody,reqHeader)=>{
     return await commonApi("POST",`${url}/business-registration`,reqBody,reqHeader)
 }
@@ -38,6 +45,9 @@ export const UserLogin = async(reqBody)=>{
 }
 export const Whishlistapi = async(reqBody,reqHeader)=>{
     return await commonApi("POST",`${url}/wishlist`,reqBody,reqHeader)
+}
+export const RemoveFromWishlistApi = async(reqBody,reqHeader)=>{
+    return await commonApi("POST",`${url}/remove-wishlist`,reqBody,reqHeader)
 }
 export const getwishlistapi = async(reqHeader)=>{
     return await commonApi("GET",`${url}/get-wishlist`,"",reqHeader)
@@ -71,4 +81,38 @@ export const orderPlacement =async(reqBody)=>{
 }
 export const Orderdetails =async(reqHeader)=>{
     return await commonApi("GET",`${url}/business/order-details`,{},reqHeader)
+}
+export const productchartapi = async(reqHeader)=>{
+    return await commonApi("GET",`${url}/chartproducts`,{},reqHeader)
+}
+export const addreview =async(id,reqBody)=>{
+    return await commonApi("POST",`${url}/addreview/${id}`,reqBody)
+}
+export const pendingusersapi =async()=>{
+    return await commonApi("GET",`${url}/pendingusers`,"")
+}
+export const businessuserapproval=async(id,reqBody)=>{
+    return await commonApi("PUT",`${url}/user-approval/${id}`,reqBody)
+}
+export const BusinessUsers =async()=>{
+    return await commonApi("GET",`${url}/business-users`,)
+}
+export const fetchusersApi =async()=>{
+    return await commonApi("GET",`${url}/admin-users`,)
+}
+export const userstastics = async()=>{
+    return await commonApi("GET",`${url}/admin/user-stats`)
+}
+export const Businessuser =async(reqHeader)=>{
+    return await commonApi("GET",`${url}/business/businessuser`,"",reqHeader)
+}
+export const getreviews = async(reqHeader)=>{
+    return await commonApi("GET",`${url}/business/reviews`,"",reqHeader)
+}
+export const getUserOrdersApi =async(reqHeader)=>{
+    return await commonApi("GET",`${url}/user/orders`,"",reqHeader)
+}
+export const updateCartQuantityApi=async(reqBody,reqHeader)=>{
+    return await commonApi("PUT",`${url}/user/cartitem-incrementation`,reqBody,reqHeader)
+
 }

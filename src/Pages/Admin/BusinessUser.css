@@ -1,0 +1,113 @@
+.business-users-container {
+    max-width: 1100px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .custom-table th, .custom-table td {
+    padding: 12px;
+ 
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  .custom-table td {
+    color: #000000;
+  }
+  .custom-table thead {
+    background-color: #373738;
+    color: white;
+  }
+  
+  .custom-table tbody tr:hover {
+    background-color: #f1f1f1;
+    transition: 0.3s;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  
+  .status-badge.approved {
+ 
+    color: rgb(0, 0, 0);
+  }
+  
+  .status-badge.pending {
+    background-color: #ff9800;
+    color: white;
+  }
+  
+  .status-badge.rejected {
+    background-color: #e53935;
+    color: white;
+  }
+  
+  .view-details-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .view-details-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .image-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .image-gallery img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: transform 0.3s;
+  }
+  
+  .image-gallery img:hover {
+    transform: scale(1.1);
+  }
+  
+  .fullscreen-modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .fullscreen-modal-body img {
+    max-width: 100%;
+    max-height: 90vh;
+  }
+  
