@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useState } from "react";
 
 
@@ -9,7 +10,9 @@ export const loginResponseContext = createContext({})
 function ContextShare({children}) {
     const [editResponse,setEditResponse]=useState([])
     const [deletestatus,setDeletestatus]=useState([])
-    const[loginResponse,setLoginResponse] = useState(false)
+    const[loginResponse,setLoginResponse] = useState("")
+ 
+    
 
   return (
     <>

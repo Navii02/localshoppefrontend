@@ -60,7 +60,12 @@ function UserCards({ products }) {
     const handleCardClick = () => {
         if (isOutOfStock) return; // Prevent navigation if out of stock
         if (sessionStorage.getItem("token")) {
+            if(sessionStorage.getItem("savedLocation")){
             navigate(`/productsdetail/${products._id}`);
+            }
+            else{
+                alert("Please Select the location")
+            }
         } else {
             navigate("/login");
         }

@@ -7,6 +7,7 @@ function UserFooter() {
   return (
     <>
       <div className="container mt-3">
+        <hr />
         <div className="row">
           <div className="col-md-6">
             <div className="row">

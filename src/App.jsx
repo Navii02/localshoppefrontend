@@ -25,47 +25,153 @@ import { useContext } from "react";
 import Profile from "./Pages/Business/Profile";
 import ProductReviews from "./Pages/Business/ProductReviews";
 
-
-
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+import BusinessProtectedRoute from "./ProtectedRoute/BusinessProtectedRoute";
 
 function App() {
-  const {loginResponse}=useContext(loginResponseContext)
+  const { loginResponse } = useContext(loginResponseContext);
 
   return (
     <>
       <Routes>
         {/* user */}
         <Route path="/" element={<UserHome />} />
-        <Route path="/profile" element={<ProfilePage/>} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<UserRegistraion />} />
         <Route path="/register" element={<UserRegistraion register={true} />} />
-        <Route path="/user/wishlist" element={<Wishlist/>} />
-        <Route path="/user/profile" element={<UserProfile/>} />
-        <Route path="/user/orders" element={<Order/>}/>
-        <Route path="/cart" element={<Cart/>}/>
-        <Route path="/productsdetail/:id" element={<ProductDetails/>}/>
-        <Route path="/payment/:productId" element={<PaymentPage />} />
+        <Route
+          path="/user/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/profile"
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/orders"
+          element={
+            <ProtectedRoute>
+              <Order />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/productsdetail/:id"
+          element={
+            <ProtectedRoute>
+              <ProductDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment/:productId"
+          element={
+            <ProtectedRoute>
+              <PaymentPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Business */}
-        <Route path="/business" element={<BusinessHome />} />
+        <Route
+          path="/business"
+          element={
+            <BusinessProtectedRoute>
+              <BusinessHome />
+            </BusinessProtectedRoute>
+          }
+        />
         <Route path="/business/login" element={<BusinessRegisteration />} />
-        <Route path="/business/register"element={<BusinessRegisteration register={true} />}/>
-        <Route path="/business/registrationpage" element={<BusinessRegisterationForm/>} />
-        <Route path="/business/products" element={<ProductPage/>} />
-        <Route path="/business/orders" element={<OrderPage/>} />
-        <Route path="/business/profile" element={<Profile/>} />
-        <Route path="/business/reviews" element={<ProductReviews/>} />
-        
-
+        <Route
+          path="/business/register"
+          element={<BusinessRegisteration register={true} />}
+        />
+        <Route
+          path="/business/registrationpage"
+          element={
+            <BusinessProtectedRoute>
+              <BusinessRegisterationForm />
+            </BusinessProtectedRoute>
+          }
+        />
+        <Route
+          path="/business/products"
+          element={
+            <BusinessProtectedRoute>
+              <ProductPage />
+            </BusinessProtectedRoute>
+          }
+        />
+        <Route
+          path="/business/orders"
+          element={
+            <BusinessProtectedRoute>
+              <OrderPage />
+            </BusinessProtectedRoute>
+          }
+        />
+        <Route
+          path="/business/profile"
+          element={
+            <BusinessProtectedRoute>
+              <Profile />
+            </BusinessProtectedRoute>
+          }
+        />
+        <Route
+          path="/business/reviews"
+          element={
+            <BusinessProtectedRoute>
+              <ProductReviews />
+            </BusinessProtectedRoute>
+          }
+        />
 
         {/* Admin */}
-        <Route path="/admin" element={loginResponse?<AdminHome />:<Pagentfound/>} />
+        <Route
+          path="/admin"
+          element={loginResponse ? <AdminHome /> : <Pagentfound />}
+        />
         <Route path="/admin/login" element={<AdminRegistration />} />
-        <Route path="/admin/register"element={<AdminRegistration register={true} />}/>
-        <Route path="/admin/approval" element={loginResponse?<Approval/>:<Pagentfound/>} />
-        <Route path="/admin/businessusers" element={loginResponse?<BusinessusersPage/>:<Pagentfound/>}/>
-        <Route path="/admin/users" element={loginResponse?<Userpage/>:<Pagentfound/>}/>
-
+        <Route
+          path="/admin/register"
+          element={<AdminRegistration register={true} />}
+        />
+        <Route
+          path="/admin/approval"
+          element={loginResponse ? <Approval /> : <Pagentfound />}
+        />
+        <Route
+          path="/admin/businessusers"
+          element={loginResponse ? <BusinessusersPage /> : <Pagentfound />}
+        />
+        <Route
+          path="/admin/users"
+          element={loginResponse ? <Userpage /> : <Pagentfound />}
+        />
 
         <Route path="*" element={<Pagentfound />} />
       </Routes>

@@ -1,13 +1,16 @@
+/* eslint-disable react/prop-types */
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, TextField,Button } from "@mui/material";
-import { useState } from "react";
+import {useState } from "react";
 //import React from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { UserRegister,UserLogin } from "../../service/allApi";
 
+
 function UserRegistration({ register }) {
   const Navigate = useNavigate();
+  
 
     const [Details, setDetails] = useState({
  
@@ -42,6 +45,7 @@ function UserRegistration({ register }) {
               JSON.stringify(result.data.newUser)
             );
             sessionStorage.setItem("token", result.data.token);
+            
     
             Navigate("/login");
           } else if (result.status == 406) {

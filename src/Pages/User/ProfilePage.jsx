@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserHeader from "../../components/UserHeader";
 import { FaUserCircle } from "react-icons/fa"; // Import user icon
 import "./ProfilePage.css"; // Import the updated CSS
