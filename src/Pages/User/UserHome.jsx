@@ -44,6 +44,12 @@ function UserHome() {
 
     fetchProducts();
   }, [locationstatus]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+const toggleDropdown = () => {
+  setDropdownOpen(!dropdownOpen);
+};
+
 
   useEffect(() => {
     filterProducts();
@@ -100,22 +106,27 @@ function UserHome() {
 
         <div className="content-container">
           {/* Category Sidebar */}
-          <div className="category-sidebar">
-            <h4>Categories</h4>
-            <ul>
-              {allCategories.map((category) => (
-                <li
-                  key={category}
-                  className={
-                    selectedCategory === category ? "active" : ""
-                  }
-                  onClick={() => handleCategorySelection(category)}
-                >
-                  {category}
-                </li>
-              ))}
-            </ul>
-          </div>
+         {/* Category Sidebar / Dropdown */}
+<div className="category-sidebar">
+  <h4 className="category-title" onClick={toggleDropdown}>
+    Categories
+    <span className="dropdown-icon">
+      {dropdownOpen ? "▲" : "▼"}
+    </span>
+  </h4>
+  <ul className={`category-list ${dropdownOpen ? "show" : ""}`}>
+    {allCategories.map((category) => (
+      <li
+        key={category}
+        className={selectedCategory === category ? "active" : ""}
+        onClick={() => handleCategorySelection(category)}
+      >
+        {category}
+      </li>
+    ))}
+  </ul>
+</div>
+
 
           {/* Product Section */}
           <div className="product-section">
