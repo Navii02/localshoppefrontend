@@ -35,13 +35,13 @@ function BusinessHome() {
   const cartCounts = [];
 
   products?.forEach((product) => {
-    categoryCounts[product.Catageory] = (categoryCounts[product.Catageory] || 0) + 1;
-    productNames.push(product.productName);
-    actualPrices.push(parseFloat(product.actualPrice));
-    sellingPrices.push(parseFloat(product.price));
+    categoryCounts[product?.Catageory] = (categoryCounts[product?.Catageory] || 0) + 1;
+    productNames.push(product?.productName);
+    actualPrices.push(parseFloat(product?.actualPrice));
+    sellingPrices.push(parseFloat(product?.price));
     reviewsCount[product.productName] = product.reviews?.length || 0;
-    wishlistCounts.push(product.WishlistUserId.length);
-    cartCounts.push(product.CartUserId.length);
+    wishlistCounts.push(product.WishlistUserId?.length);
+    cartCounts.push(product.CartUserId?.length);
   });
 
   // Chart Options
