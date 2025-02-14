@@ -30,9 +30,13 @@ export const project = async (options = {}) => {
     return await commonApi("GET", `${url}/products`, null, options.headers,options.params);
 };
 
-export const UpdateProduct= async(id,reqBody,reqHeader)=>{
+export const UpdateProductWithImages= async(id,reqBody,reqHeader)=>{
     return await commonApi("PUT",`${url}/update-product/${id}`,reqBody,reqHeader)
 }
+export const UpdateProductWithoutImages= async(id,reqBody,reqHeader)=>{
+    return await commonApi("PUT",`${url}/update-productwithoutImg/${id}`,reqBody,reqHeader)
+}
+
 export const DeleteProduct =async(id,reqHeader)=>{
     return await commonApi("DELETE",`${url}/delete-product/${id}`,{},reqHeader)
 }

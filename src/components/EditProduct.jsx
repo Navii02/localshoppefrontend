@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { url } from '../service/ServiceUrl';
-import { UpdateProduct } from '../service/allApi';
-import { deletedResponseContext, editResponseContext } from '../context/ContextShare';
+import { UpdateProductWithImages, UpdateProductWithoutImages } from '../service/allApi';
 
-function EditProduct({ productData, setUpdateStatus }) {
+import { editResponseContext } from '../context/ContextShare';
+
+function EditProduct({ productData}) {
 const {setEditResponse} =useContext(editResponseContext)
 
   const [show, setShow] = useState(false);
@@ -85,44 +87,85 @@ console.log(images);
     }));
   };
 
+
   const handleSubmit = async () => {
-    //console.log(e);
-    
-    const data = new FormData();
-    data.append('productName', ProductData.productName);
-    data.append('productQuantity', ProductData.productQuantity);
-    data.append('actualPrice', ProductData.actualPrice);
-    data.append('price', ProductData.price);
-    data.append('expiryDate', ProductData.expiryDate);
-    data.append('description', ProductData.description);
-    data.append('expectedDeliveryTime', ProductData.expectedDeliveryTime);
-
-    images.forEach(({ file, preview }) => {
-      if (file) {
-        data.append('images', file);
-      } else {
-        data.append('existingImages', preview); // Send existing image URLs
-      }
-    });
-
+    // const token = sessionStorage.getItem("token");
+    const hasNewImages = images.some((image) => image.file);
+  
+    if (hasNewImages) {
+      // If new images are present, use FormData
+      const data = new FormData();
+      data.append('productName', ProductData.productName);
+      data.append('productQuantity', ProductData.productQuantity);
+      data.append('actualPrice', ProductData.actualPrice);
+      data.append('price', ProductData.price);
+      data.append('expiryDate', ProductData.expiryDate);
+      data.append('description', ProductData.description);
+      data.append('expectedDeliveryTime', ProductData.expectedDeliveryTime);
+  
+      images.forEach(({ file, preview }) => {
+        if (file) {
+          data.append('images', file);
+        } else {
+          data.append('existingImages', preview); // Send existing image URLs
+        }
+      });
+  
+      try {
+   
     const token = sessionStorage.getItem("token");
     const reqHeader = {
       'Content-Type': 'multipart/form-data',
       'Authorization': `Bearer ${token}`,
     };
     
-  
-        const result = await UpdateProduct(productData._id,data, reqHeader);
+        const result = await UpdateProductWithImages(productData._id, data, reqHeader);
         if (result.status === 200) {
-          alert("Product updated successfully   ")
-          setEditResponse(result.data)
+          alert("Product updated successfully");
+          setEditResponse(result.data);
           handleClose();
         } else {
           alert("Something went wrong");
         }
+      } catch (error) {
+        console.error("Error updating product with images:", error);
+        alert("An error occurred while updating the product.");
+      }
   
-
+    } else {
+      // If no new images, use JSON
+      const data = {
+        productName: ProductData.productName,
+        productQuantity: ProductData.productQuantity,
+        actualPrice: ProductData.actualPrice,
+        price: ProductData.price,
+        expiryDate: ProductData.expiryDate,
+        description: ProductData.description,
+        expectedDeliveryTime: ProductData.expectedDeliveryTime,
+        existingImages: images.map((image) => image.preview), // Send existing image URLs
+      };
+  
+      try {
+       const token = sessionStorage.getItem("token");
+        const reqHeader = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    };
+        const result = await UpdateProductWithoutImages(productData._id, data, reqHeader);
+        if (result.status === 200) {
+          alert("Product updated successfully");
+          setEditResponse(result.data);
+          handleClose();
+        } else {
+          alert("Something went wrong");
+        }
+      } catch (error) {
+        console.error("Error updating product without images:", error);
+        alert("An error occurred while updating the product.");
+      }
+    }
   };
+  
 
   return (
     <div>

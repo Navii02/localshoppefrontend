@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link, useNavigate, } from "react-router-dom";
 import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import { useState ,useContext} from "react";
@@ -136,11 +137,7 @@ function AdminRegistration({ register }) {
               </Link>
             </div>
           )}
-          <div className="text-center">
-            <Link to={register ? "/admin/login" : "/admin/register"} className="link">
-              {register ? "Already have an account? Sign In" : "New User? Sign Up"}
-            </Link>
-          </div>
+         
         </Box>
       </Paper>
     </div>

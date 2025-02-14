@@ -1,9 +1,9 @@
-//import React from 'react'
-import { Box, TextField, Button } from "@mui/material";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+/* eslint-disable react/prop-types */
+import { Box, TextField, Button, Typography, Paper, Divider } from "@mui/material";
+// import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { businessRegister, businessLogin } from "../../service/allApi";
 
 function BusinessRegisteration({ register }) {
@@ -15,17 +15,16 @@ function BusinessRegisteration({ register }) {
     password: "",
     confirmPassword: "",
   });
+
   const handleRegister = async () => {
-    const { businessname, username, email, password, confirmPassword } =
-      Details;
+    const { businessname, username, email, password, confirmPassword } = Details;
     if (!businessname || !username || !email || !password || !confirmPassword) {
-      alert("Please Fill The Form Completly");
-    } else if (password != confirmPassword) {
-      alert("The password must be same");
+      alert("Please Fill The Form Completely");
+    } else if (password !== confirmPassword) {
+      alert("The password must be the same");
     } else {
       const result = await businessRegister(Details);
-      console.log(result);
-      if (result.status == 200) {
+      if (result.status === 200) {
         alert("Registration Successfully Completed");
         setDetails({
           businessname: "",
@@ -34,230 +33,176 @@ function BusinessRegisteration({ register }) {
           password: "",
           confirmPassword: "",
         });
-        sessionStorage.setItem(
-          "userdetails",
-          JSON.stringify(result.data.newUser)
-        );
+        sessionStorage.setItem("userdetails", JSON.stringify(result.data.newUser));
         sessionStorage.setItem("token", result.data.token);
-
         Navigate("/business/registrationpage");
-      } else if (result.status == 406) {
+      } else if (result.status === 406) {
         alert("The User is already registered");
-        setDetails({
-          businessname: "",
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
       } else {
         alert("Something went wrong");
       }
     }
   };
 
-  useEffect(() => {
-  
-  },[]);
-
   const handleLogin = async () => {
     const { email, password } = Details;
-    if ((!email, !password)) {
-      alert("Please Fill The Form Completly");
+    if (!email || !password) {
+      alert("Please Fill The Form Completely");
     } else {
       const result = await businessLogin(Details);
-      console.log(result);
-      if (result.status == 200) {
-       
-        setDetails({
-          businessname: "",
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
-       
-      sessionStorage.setItem(
-        "userdetails",
-        JSON.stringify(result.data.existingBusinessUser)
-      );
-      sessionStorage.setItem("token", result.data.token);
-
-      const userDetails = JSON.parse(sessionStorage.getItem("userdetails"));
-      if (
-        userDetails &&
-        userDetails.BankDetails &&
-        userDetails.BankDetails.Name &&
-        userDetails.BankDetails.AccountNo &&
-        userDetails.BankDetails.IFSCode &&
-        userDetails.PanCardNo &&
-        userDetails.PanName &&
-        userDetails.BusinessType &&
-        userDetails.GSTNo &&
-        userDetails.LicenseNo &&
-        userDetails.LicenseImg &&
-        userDetails.PancardImg &&
-        userDetails.photo
-
-      ) {
-      if(userDetails.status == "approved"){
-        alert("Login Sucessful");
-        Navigate('/business')
-      }
-      else if(userDetails.status == "Pending"){
-        alert("Your Account is Under reviewing session. Please wait for  your account get activated.")
-      }
-      else{
-        alert("Your Account is is not satisfiy recommended creteria")
-      }
+      if (result.status === 200) {
+        sessionStorage.setItem("userdetails", JSON.stringify(result.data.existingBusinessUser));
+        sessionStorage.setItem("token", result.data.token);
+        alert("Login Successful");
+        Navigate("/business");
+      } else if (result.status === 406) {
+        alert("Invalid email or password");
       } else {
-        Navigate("/business/registrationpage");
-      }
-      }else if(result.status==406){
-        alert("invalid email or password")
-
-      }
-      else{
-        alert("Something went wrong")
+        alert("Something went wrong");
       }
     }
   };
+
   return (
-    <>
-      <div className="container-fluid d-flex justify-content-center align-items-center vh-100 ">
-        <div
-          className="col-lg-4 col-md-6 col-sm-10 rounded p-3"
-          style={{ background: "#D0DDD0" }}
-        >
-          {register ? (
-            <h1 className="text-center mb-4">Join Us</h1>
-          ) : (
-            <h1 className="text-center mb-4">Sign In</h1>
-          )}
-          <Box component="form" noValidate autoComplete="off">
-            {register && (
-              <div>
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  id="Business Name"
-                  label="Business Name"
-                  variant="outlined"
-                  type="text"
-                  value={Details.businessname}
-                  onChange={(e) =>
-                    setDetails({ ...Details, businessname: e.target.value })
-                  }
-                />
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  id="Owner Name"
-                  label="Owner Name"
-                  variant="outlined"
-                  type="text"
-                  value={Details.username}
-                  onChange={(e) =>
-                    setDetails({ ...Details, username: e.target.value })
-                  }
-                />
-              </div>
-            )}
-            <TextField
-              fullWidth
-              margin="normal"
-              id="email"
-              label="Email"
-              variant="outlined"
-              type="email"
-              value={Details.email}
-              onChange={(e) =>
-                setDetails({ ...Details, email: e.target.value })
-              }
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              id="password"
-              label="Password"
-              type="password"
-              variant="outlined"
-              value={Details.password}
-              onChange={(e) =>
-                setDetails({ ...Details, password: e.target.value })
-              }
-            />
-            {register && (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(135deg,rgb(64, 202, 241) 0%,rgb(163, 255, 120) 100%)",
+        padding: 2,
+      }}
+    >
+      <Paper
+        elevation={4}
+        sx={{
+          maxWidth: 400,
+          width: "100%",
+          padding: 4,
+          borderRadius: 3,
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Typography variant="h4" align="center" gutterBottom>
+          {register ? "Join Us" : "Sign In"}
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Box component="form" noValidate autoComplete="off">
+          {register && (
+            <>
               <TextField
                 fullWidth
                 margin="normal"
-                id="confirm password"
-                label="confirm Password"
-                type="password"
+                label="Business Name"
                 variant="outlined"
-                value={Details.confirmPassword}
+                value={Details.businessname}
                 onChange={(e) =>
-                  setDetails({ ...Details, confirmPassword: e.target.value })
+                  setDetails({ ...Details, businessname: e.target.value })
                 }
               />
-            )}
-            <div className="d-flex justify-content-center mt-4">
-              {!register ? (
-                <Button
-                  variant="contained"
-                  color="success"
-                  className="w-50"
-                  onClick={handleLogin}
-                >
-                  Sign In{" "}
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="success"
-                  className="w-50"
-                  onClick={handleRegister}
-                >
-                  Sign Up
-                </Button>
-              )}
-            </div>
-            <div className="text-center mt-4">
-              <h5>or</h5>
-            </div>
-            <div className="d-flex justify-content-center mt-3">
-              <Button
-                variant="contained"
-                color="error"
-                className="w-50"
-                startIcon={<FontAwesomeIcon icon={faGoogle} />}
-              >
-                Sign in with Google
-              </Button>
-            </div>
-            {!register && (
-              <div className="text-center mt-3">
-                <Link to="/forgotpassword" className="text-decoration-none">
-                  <small>Forgot Password?</small>
-                </Link>
-              </div>
-            )}
-            <div className="d-flex justify-content-center mt-3">
-              <Link
-                to={!register ? "/business/register" : "/business/login"}
-                className="text-decoration-none text-primary"
-              >
-                <small>
-                  {!register
-                    ? "New User? Click Here to Sign Up"
-                    : "Already User? Click Here to Sign In"}
-                </small>
-              </Link>
-            </div>
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Owner Name"
+                variant="outlined"
+                value={Details.username}
+                onChange={(e) =>
+                  setDetails({ ...Details, username: e.target.value })
+                }
+              />
+            </>
+          )}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
+            variant="outlined"
+            type="email"
+            value={Details.email}
+            onChange={(e) =>
+              setDetails({ ...Details, email: e.target.value })
+            }
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Password"
+            type="password"
+            variant="outlined"
+            value={Details.password}
+            onChange={(e) =>
+              setDetails({ ...Details, password: e.target.value })
+            }
+          />
+          {register && (
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              value={Details.confirmPassword}
+              onChange={(e) =>
+                setDetails({ ...Details, confirmPassword: e.target.value })
+              }
+            />
+          )}
+          <Box textAlign="center" mt={3}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={register ? handleRegister : handleLogin}
+              sx={{
+                width: "100%",
+                borderRadius: 2,
+                textTransform: "none",
+                boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              {register ? "Sign Up" : "Sign In"}
+            </Button>
           </Box>
-        </div>
-      </div>
-    </>
+          {/* <Divider sx={{ my: 3 }}>or</Divider> */}
+          {/* <Box textAlign="center">
+            <Button
+              variant="outlined"
+              color="error"
+              startIcon={<FontAwesomeIcon icon={faGoogle} />}
+              sx={{
+                width: "100%",
+                textTransform: "none",
+                borderRadius: 2,
+              }}
+            >
+              Sign in with Google
+            </Button>
+          </Box> */}
+          {!register && (
+            <Box textAlign="center" mt={2}>
+              <Link to="/forgotpassword" className="text-decoration-none">
+                <Typography variant="body2" sx={{ color: "red" }}>
+                  Forgot Password?
+                </Typography>
+              </Link>
+            </Box>
+          )}
+          <Box textAlign="center" mt={2}>
+            <Link
+              to={!register ? "/business/register" : "/business/login"}
+              className="text-decoration-none"
+            >
+              <Typography variant="body2" color="primary">
+                {!register
+                  ? "New User? Click Here to Sign Up"
+                  : "Already User? Click Here to Sign In"}
+              </Typography>
+            </Link>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 
